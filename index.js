@@ -5,6 +5,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config()
 app.use(express.json())
+app.use(cors())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5bogalj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -25,6 +26,11 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
 
+        })
+        app.post('/volunteers', async (req, res) => {
+            const newPost = req.body;
+            const result = volunteerCollection.insertOne(newPost)
+            res.send(result)
         })
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
