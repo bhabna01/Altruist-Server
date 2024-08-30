@@ -22,7 +22,7 @@ async function run() {
         const volunteerCollection = client.db("altruisthub").collection("volunteers");
         //volunteer
         app.get('/volunteers', async (req, res) => {
-            const cursor = volunteerCollection.find();
+            const cursor = volunteerCollection.find().sort({ "deadline": 1 });
             const result = await cursor.toArray()
             res.send(result)
 
