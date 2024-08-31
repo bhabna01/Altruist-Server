@@ -21,16 +21,50 @@ async function run() {
         await client.connect();
         const volunteerCollection = client.db("altruisthub").collection("volunteers");
         //volunteer
+        const volunteerRequest = client.db("altruisthub").collection("volunteerRequestCollection")
         app.get('/volunteers', async (req, res) => {
-            const cursor = volunteerCollection.find().sort({ "deadline": 1 });
+
+            const searchQuery = req.query.search || "";
+            const query = {
+                $or: [
+                    { postTitle: { $regex: searchQuery, $options: 'i' } },
+                    { category: { $regex: searchQuery, $options: 'i' } }
+                ]
+            }
+            const cursor = volunteerCollection.find(query).sort({ "deadline": 1 });
+
             const result = await cursor.toArray()
             res.send(result)
 
+        })
+        app.get("/volunteers/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            // const options={
+            //     projection:{thumbnail:1,postTitle:1,description:1,category:1,location:1,volunteersNeeded:1,deadline:1,organizerName:1,}
+            // }
+            const result = await volunteerCollection.findOne(query)
+            res.send(result)
         })
         app.post('/volunteers', async (req, res) => {
             const newPost = req.body;
             const result = volunteerCollection.insertOne(newPost)
             res.send(result)
+        })
+        //volunteerRequest
+        app.post("/volunteer-request", async (req, res) => {
+            const request = req.body;
+            const result = await volunteerRequest.insertOne(request)
+            res.send(result)
+        })
+        app.patch("/volunteers/:id", async (req, res) => {
+            const id = req.params.id;
+            const updateDoc = req.body
+            const result = await volunteerCollection.updateOne({ _id: new ObjectId(id) }, updateDoc)
+            res.send(result)
+
+
+
         })
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
