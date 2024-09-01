@@ -25,10 +25,16 @@ async function run() {
         app.get('/volunteers', async (req, res) => {
 
             const searchQuery = req.query.search || "";
+            const userEmail = req.query.email || "";
             const query = {
-                $or: [
-                    { postTitle: { $regex: searchQuery, $options: 'i' } },
-                    { category: { $regex: searchQuery, $options: 'i' } }
+                $and: [
+                    {
+                        $or: [
+                            { postTitle: { $regex: searchQuery, $options: 'i' } },
+                            { category: { $regex: searchQuery, $options: 'i' } }
+                        ]
+                    },
+                    { organizerEmail: userEmail }
                 ]
             }
             const cursor = volunteerCollection.find(query).sort({ "deadline": 1 });
@@ -46,6 +52,7 @@ async function run() {
             const result = await volunteerCollection.findOne(query)
             res.send(result)
         })
+
         app.post('/volunteers', async (req, res) => {
             const newPost = req.body;
             const result = volunteerCollection.insertOne(newPost)
