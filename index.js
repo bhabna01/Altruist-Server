@@ -26,7 +26,7 @@ async function run() {
 
             const searchQuery = req.query.search || "";
             const userEmail = req.query.email || "";
-            const query = {
+            let query = {
                 $and: [
                     {
                         $or: [
@@ -34,8 +34,16 @@ async function run() {
                             { category: { $regex: searchQuery, $options: 'i' } }
                         ]
                     },
-                    { organizerEmail: userEmail }
+
                 ]
+            }
+            if (userEmail) {
+                query = {
+                    $and: [
+                        query,
+                        { organizerEmail: userEmail }
+                    ]
+                };
             }
             const cursor = volunteerCollection.find(query).sort({ "deadline": 1 });
 
