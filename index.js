@@ -54,9 +54,7 @@ async function run() {
         app.get("/volunteers/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
-            // const options={
-            //     projection:{thumbnail:1,postTitle:1,description:1,category:1,location:1,volunteersNeeded:1,deadline:1,organizerName:1,}
-            // }
+
             const result = await volunteerCollection.findOne(query)
             res.send(result)
         })
@@ -75,8 +73,25 @@ async function run() {
         app.patch("/volunteers/:id", async (req, res) => {
             const id = req.params.id;
             const updateDoc = req.body
-            const result = await volunteerCollection.updateOne({ _id: new ObjectId(id) }, updateDoc)
-            res.send(result)
+            // const result = await volunteerCollection.updateOne({ _id: new ObjectId(id) }, updateDoc)
+            // res.send(result)
+
+
+            if (updateDoc.$inc) {
+
+                const result = await volunteerCollection.updateOne(
+                    { _id: new ObjectId(id) },
+                    updateDoc
+                );
+                res.send(result);
+            } else {
+
+                const result = await volunteerCollection.updateOne(
+                    { _id: new ObjectId(id) },
+                    { $set: updateDoc }
+                );
+                res.send(result);
+            }
 
 
 
