@@ -64,12 +64,7 @@ async function run() {
             const result = volunteerCollection.insertOne(newPost)
             res.send(result)
         })
-        //volunteerRequest
-        app.post("/volunteer-request", async (req, res) => {
-            const request = req.body;
-            const result = await volunteerRequest.insertOne(request)
-            res.send(result)
-        })
+
         app.patch("/volunteers/:id", async (req, res) => {
             const id = req.params.id;
             const updateDoc = { ...req.body };
@@ -102,6 +97,29 @@ async function run() {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
             const result = await volunteerCollection.deleteOne(query)
+            res.send(result)
+
+        })
+        //volunteerRequest
+        app.post("/volunteer-request", async (req, res) => {
+            const request = req.body;
+            const result = await volunteerRequest.insertOne(request)
+            res.send(result)
+        })
+        app.get("/volunteer-request", async (req, res) => {
+            let query = {}
+            if (req.query?.email) {
+                query = { volunteerEmail: req.query.email }
+            }
+            const cursor = volunteerRequest.find(query);
+
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+        app.delete("/volunteer-request/:id", async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await volunteerRequest.deleteOne(query)
             res.send(result)
 
         })
