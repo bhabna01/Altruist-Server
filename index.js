@@ -72,7 +72,9 @@ async function run() {
         })
         app.patch("/volunteers/:id", async (req, res) => {
             const id = req.params.id;
-            const updateDoc = req.body
+            const updateDoc = { ...req.body };
+            delete updateDoc._id;
+
             // const result = await volunteerCollection.updateOne({ _id: new ObjectId(id) }, updateDoc)
             // res.send(result)
 
@@ -94,6 +96,13 @@ async function run() {
             }
 
 
+
+        })
+        app.delete("/volunteers/:id", async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await volunteerCollection.deleteOne(query)
+            res.send(result)
 
         })
         await client.db("admin").command({ ping: 1 });
