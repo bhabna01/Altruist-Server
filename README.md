@@ -30,6 +30,7 @@ The AltruistHub backend provides the API for the AltruistHub volunteer managemen
 
 3. **Configuration**
    Create a .env file in the root directory with the following content:
+
    DB_USER=volunteerDB
    DB_PASS=2qkvz0On1U1JFdiT
    ACCESS_TOKEN_SECRET=2094ea51d2d5e73534cbb88a21b6dcb7c655b3a99df024a05b7d3c8e45cb590b0c51b01686ceebe88b03042da9108f78d8ae119b4635b0b94eda00b82521dfca
@@ -42,50 +43,60 @@ POST /jwt
 Description: Generates a JWT token for authenticated users.
 Request Body: { "email": "user@example.com" }
 Response: { "success": true }
+
 POST /logout
 
 Description: Logs out the user by clearing the JWT token.
 Request Body: { "email": "user@example.com" }
 Response: { "success": true }
 Volunteers
+
 GET /volunteers
 
 Description: Retrieves all volunteer posts, with optional search and filter by email.
 Query Parameters: search (string), email (string)
 Response: List of volunteer posts.
+
 GET /volunteers/
 
 Description: Retrieves a single volunteer post by ID.
 Response: Volunteer post object.
+
 POST /volunteers
 
 Description: Creates a new volunteer post (protected route).
 Request Body: Volunteer post object.
 Response: { "acknowledged": true, "insertedId": "objectId" }
+
 PATCH /volunteers/
 
 Description: Updates a volunteer post.
 Request Body: Partial volunteer post object.
 Response: Update result object.
+
 DELETE /volunteers/
 
 Description: Deletes a volunteer post.
 Response: Deletion result object.
 Volunteer Requests
+
 POST /volunteer-request
 
 Description: Creates a new volunteer request.
 Request Body: Volunteer request object.
 Response: { "acknowledged": true, "insertedId": "objectId" }
+
 GET /volunteer-request
 
 Description: Retrieves volunteer requests, with optional filter by email.
 Query Parameter: email (string)
 Response: List of volunteer requests.
+
 DELETE /volunteer-request/
 
 Description: Deletes a volunteer request.
 Response: Deletion result object.
+
 Testimonials
 GET /testimonials
 Description: Retrieves all testimonials.
