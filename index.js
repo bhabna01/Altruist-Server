@@ -9,11 +9,16 @@ require('dotenv').config()
 app.use(express.json())
 app.use(cors({
     origin: [
-        'http://localhost:5173', 'http://localhost:5174'
+        'http://localhost:5173', 'https://email-pass-auth-97857.web.app', 'https://email-pass-auth-97857.firebaseapp.com'
     ],
     credentials: true
 }));
 app.use(cookieParser());
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+};
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5bogalj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -48,29 +53,31 @@ const verifyToken = (req, res, next) => {
 async function run() {
     try {
 
-        await client.connect();
+        // await client.connect();
         const volunteerCollection = client.db("altruisthub").collection("volunteers");
         //volunteer
         const volunteerRequest = client.db("altruisthub").collection("volunteerRequestCollection")
+        //testimonial 
+        const testimonial = client.db("altruisthub").collection("testimonials")
         //jwt
         app.post('/jwt', logger, async (req, res) => {
             const user = req.body;
-            console.log('user for token', user);
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
-
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none'
+            console.log(user)
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '100d'
             })
-                .send({ success: true });
+            res
+                .cookie('token', token, cookieOptions)
+                .send({ sucess: true })
         })
+
 
         app.post('/logout', async (req, res) => {
             const user = req.body;
-            console.log('logging out', user);
-            res.clearCookie('token', { maxAge: 0 }).send({ success: true })
+            console.log('logging out', user)
+            res.clearCookie('token', { ...cookieOptions, maxAge: 0 }).send({ sucess: true })
         })
+
 
 
 
@@ -176,7 +183,15 @@ async function run() {
             res.send(result)
 
         })
-        await client.db("admin").command({ ping: 1 });
+        //get testimonials
+        app.get("/testimonials", async (req, res) => {
+            const cursor = testimonial.find();
+
+            const result = await cursor.toArray()
+            res.send(result)
+
+        })
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
 
