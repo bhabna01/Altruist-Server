@@ -40,8 +40,6 @@ The AltruistHub backend provides the API for the AltruistHub volunteer managemen
 
     nodemon index.js
 
-# Authentication
-
 ## API Endpoints 
 **POST /jwt**
 
