@@ -32,77 +32,82 @@ The AltruistHub backend provides the API for the AltruistHub volunteer managemen
    Create a .env file in the root directory with the following content:
 
    DB_USER=volunteerDB
+
    DB_PASS=2qkvz0On1U1JFdiT
+
    ACCESS_TOKEN_SECRET=2094ea51d2d5e73534cbb88a21b6dcb7c655b3a99df024a05b7d3c8e45cb590b0c51b01686ceebe88b03042da9108f78d8ae119b4635b0b94eda00b82521dfca
 4. **Running the Server**
+
     nodemon index.js
-## API Endpoints
+
 # Authentication
-POST /jwt
 
-Description: Generates a JWT token for authenticated users.
-Request Body: { "email": "user@example.com" }
-Response: { "success": true }
+## API Endpoints 
+**POST /jwt**
 
-POST /logout
+- Description: Generates a JWT token for authenticated users.
+- Request Body: { "email": "user@example.com" }
+- Response: { "success": true }
 
-Description: Logs out the user by clearing the JWT token.
-Request Body: { "email": "user@example.com" }
-Response: { "success": true }
-Volunteers
+**POST /logout**
 
-GET /volunteers
+- Description: Logs out the user by clearing the JWT token.
+- Request Body: { "email": "user@example.com" }
+- Response: { "success": true }
 
-Description: Retrieves all volunteer posts, with optional search and filter by email.
-Query Parameters: search (string), email (string)
-Response: List of volunteer posts.
+**GET /volunteers**
 
-GET /volunteers/
+- Description: Retrieves all volunteer posts, with optional search and filter by email.
+- Query Parameters: search (string), email (string)
+- Response: List of volunteer posts.
 
-Description: Retrieves a single volunteer post by ID.
-Response: Volunteer post object.
+**GET /volunteers/**
 
-POST /volunteers
+- Description: Retrieves a single volunteer post by ID.
+- Response: Volunteer post object.
 
-Description: Creates a new volunteer post (protected route).
-Request Body: Volunteer post object.
-Response: { "acknowledged": true, "insertedId": "objectId" }
+**POST /volunteers**
 
-PATCH /volunteers/
+- Description: Creates a new volunteer post (protected route).
+- Request Body: Volunteer post object.
+- Response: { "acknowledged": true, "insertedId": "objectId" }
 
-Description: Updates a volunteer post.
-Request Body: Partial volunteer post object.
-Response: Update result object.
+**PATCH /volunteers/**
 
-DELETE /volunteers/
+- Description: Updates a volunteer post.
+- Request Body: Partial volunteer post object.
+- Response: Update result object.
 
-Description: Deletes a volunteer post.
-Response: Deletion result object.
-Volunteer Requests
+**DELETE /volunteers/**
 
-POST /volunteer-request
+- Description: Deletes a volunteer post.
+- Response: Deletion result object.
+- Volunteer Requests
 
-Description: Creates a new volunteer request.
-Request Body: Volunteer request object.
-Response: { "acknowledged": true, "insertedId": "objectId" }
+**POST /volunteer-request**
 
-GET /volunteer-request
+- Description: Creates a new volunteer request.
+- Request Body: Volunteer request object.
+- Response: { "acknowledged": true, "insertedId": "objectId" }
 
-Description: Retrieves volunteer requests, with optional filter by email.
-Query Parameter: email (string)
-Response: List of volunteer requests.
+**GET /volunteer-request**
 
-DELETE /volunteer-request/
+- Description: Retrieves volunteer requests, with optional filter by email.
+- Query Parameter: email (string)
+- Response: List of volunteer requests.
 
-Description: Deletes a volunteer request.
-Response: Deletion result object.
+**DELETE /volunteer-request/**
 
-Testimonials
-GET /testimonials
-Description: Retrieves all testimonials.
-Response: List of testimonial objects.
+- Description: Deletes a volunteer request.
+- Response: Deletion result object.
+
+**GET /testimonials**
+- Description: Retrieves all testimonials.
+- Response: List of testimonial objects.
 ## License
+
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
+
 For any questions or support, please reach out to abierhoque01@gmail.com
